@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/location")
@@ -25,6 +26,11 @@ public class LocationController {
     @GetMapping
     public ResponseEntity<List<Location>> getAllLocation(){
         return new ResponseEntity<>(locationRepository.findAll(), HttpStatus.OK);
+    }
+    @GetMapping({"/{Id}"})
+    public ResponseEntity<Location> getLocationById(@PathVariable Long Id){
+        Optional<Location> locationById = locationRepository.findById(Id);
+        return locationById.map(location -> new ResponseEntity<>(location, HttpStatus.OK)).orElse(null);
     }
     @PostMapping({""})
     public ResponseEntity<Location> addLocation(@RequestBody Location location){

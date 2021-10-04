@@ -4,9 +4,11 @@ import com.location.Location.model.Location;
 import com.location.Location.repository.LocationRepository;
 import com.location.Location.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class LocationServiceImp implements LocationService {
     private final LocationRepository locationRepository;
 
@@ -20,7 +22,6 @@ public class LocationServiceImp implements LocationService {
         Location updatedLocation = null;
         if(getLocation.isPresent()){
             updatedLocation = getLocation.get();
-            updatedLocation.setLocationId(location.getLocationId());
             updatedLocation.setLocationName(location.getLocationName());
         }
         return updatedLocation;

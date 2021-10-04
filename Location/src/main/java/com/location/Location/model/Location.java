@@ -18,7 +18,7 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
-    private Integer locationId;
+    private Long locationId;
 
     @NotBlank
     private String locationName;
