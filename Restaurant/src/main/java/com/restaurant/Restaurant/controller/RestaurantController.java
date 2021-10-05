@@ -2,6 +2,7 @@ package com.restaurant.Restaurant.controller;
 
 import com.restaurant.Restaurant.model.FoodItems;
 import com.restaurant.Restaurant.model.Restaurant;
+import com.restaurant.Restaurant.model.UpdateRestaurant;
 import com.restaurant.Restaurant.repository.RestaurantRepository;
 import com.restaurant.Restaurant.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/restaurant")
@@ -42,10 +44,11 @@ public class RestaurantController {
 
     @PutMapping("/{Id}")
     public ResponseEntity<Restaurant> updateRestaurantsById(@PathVariable Long Id,
-                                                            @RequestBody Restaurant restaurant){
+                                                            @RequestBody UpdateRestaurant restaurant){
         Restaurant updatedRestaurant = restaurantService.updateRestaurantsByRestaurantId(restaurant,Id);
+        System.out.println(updatedRestaurant);
         restaurantRepository.save(updatedRestaurant);
-        return new ResponseEntity<>(updatedRestaurant, HttpStatus.CREATED);
+        return new ResponseEntity<>(updatedRestaurant,HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{Id}")
@@ -53,14 +56,14 @@ public class RestaurantController {
         restaurantRepository.deleteById(Id);
     }
 
-    @GetMapping("/{locationId}")
+    @GetMapping("/location/{locationId}")
     public ResponseEntity<List<Restaurant>> getAllRestaurantsByLocation(@PathVariable Long locationId){
         return new ResponseEntity<>(
                 restaurantService.findByLocation(locationId),
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{locationId}/{rating}")
+    @GetMapping("/location/{locationId}/{rating}")
     public ResponseEntity<List<Restaurant>> getAllRestaurantsByLocationAndRating(
             @PathVariable Long locationId,
             @PathVariable Double rating) {
@@ -69,7 +72,7 @@ public class RestaurantController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{locationId}/{avgPrice}")
+    @GetMapping("/location/{locationId}/{avgPrice}")
     public ResponseEntity<List<Restaurant>> getAllRestaurantsByLocationAndAvgPrice(
             @PathVariable Long locationId,
             @PathVariable Double avgPrice) {
@@ -78,7 +81,7 @@ public class RestaurantController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{locationId}/{rating}/{avgPrice}}")
+    @GetMapping("/location/{locationId}/{rating}/{avgPrice}}")
     public ResponseEntity<List<Restaurant>> getAllRestaurantsByLocationAvgPriceAndRating(
             @PathVariable Long locationId,
             @PathVariable Double avgPrice,
@@ -102,13 +105,11 @@ public class RestaurantController {
         Optional<Restaurant> currentRestaurant = restaurantRepository.findById(restaurantId);
         if(currentRestaurant.isPresent()){
             Restaurant getCurrentRestaurant = currentRestaurant.get();
-            List<FoodItems>listOfFoodItem = getCurrentRestaurant.getFoodItemsList();
+            Set<FoodItems> listOfFoodItem = getCurrentRestaurant.getFoodItemsList();
             Optional<FoodItems> currentFoodItem = listOfFoodItem.stream()
                     .filter(s->s.getId().equals(foodId))
                     .findFirst();
-            if(currentFoodItem.isPresent()){
-                listOfFoodItem.remove(currentFoodItem.get());
-            }
+            currentFoodItem.ifPresent(listOfFoodItem::remove);
             getCurrentRestaurant.setFoodItemsList(listOfFoodItem);
             restaurantRepository.save(getCurrentRestaurant);
             return new ResponseEntity<>(getCurrentRestaurant,HttpStatus.OK);

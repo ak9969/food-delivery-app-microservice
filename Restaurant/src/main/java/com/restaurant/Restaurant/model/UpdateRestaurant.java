@@ -1,12 +1,13 @@
 package com.restaurant.Restaurant.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -15,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @ToString
-public class Restaurant {
+public class UpdateRestaurant {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long restaurantId;
@@ -30,8 +31,4 @@ public class Restaurant {
     private Double avgPrice;
 
     private Long locationId;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy ="restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<FoodItems> foodItemsList;
 }

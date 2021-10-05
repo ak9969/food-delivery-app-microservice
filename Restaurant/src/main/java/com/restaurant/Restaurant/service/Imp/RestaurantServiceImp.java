@@ -2,13 +2,17 @@ package com.restaurant.Restaurant.service.Imp;
 
 import com.restaurant.Restaurant.model.FoodItems;
 import com.restaurant.Restaurant.model.Restaurant;
+import com.restaurant.Restaurant.model.UpdateRestaurant;
 import com.restaurant.Restaurant.repository.RestaurantRepository;
 import com.restaurant.Restaurant.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+@Service
 public class RestaurantServiceImp implements RestaurantService {
     private final RestaurantRepository restaurantRepository;
 
@@ -38,18 +42,17 @@ public class RestaurantServiceImp implements RestaurantService {
     }
 
     @Override
-    public Restaurant updateRestaurantsByRestaurantId(Restaurant restaurant, Long id) {
+    public Restaurant updateRestaurantsByRestaurantId(UpdateRestaurant restaurant, Long id) {
         Optional<Restaurant> currentRestaurant = restaurantRepository.findById(id);
         Restaurant updatedRestaurant = null;
         if(currentRestaurant.isPresent()){
             updatedRestaurant = currentRestaurant.get();
-            updatedRestaurant.setRestaurantId(restaurant.getRestaurantId());
             updatedRestaurant.setRestaurantName(restaurant.getRestaurantName());
             updatedRestaurant.setAvgPrice(restaurant.getAvgPrice());
             updatedRestaurant.setRating(restaurant.getRating());
             updatedRestaurant.setLocationId(restaurant.getLocationId());
-            updatedRestaurant.setFoodItemsList(restaurant.getFoodItemsList());
         }
+        System.out.println(restaurant);
         return updatedRestaurant;
 
     }
@@ -60,7 +63,7 @@ public class RestaurantServiceImp implements RestaurantService {
         Restaurant updatedFoodByRestaurant = null;
         if(currentRestaurant.isPresent()){
             updatedFoodByRestaurant = currentRestaurant.get();
-            List<FoodItems> listOfFoodItems = updatedFoodByRestaurant.getFoodItemsList();
+            Set<FoodItems> listOfFoodItems = updatedFoodByRestaurant.getFoodItemsList();
             Optional<FoodItems> orderedFoodItem = listOfFoodItems.stream()
                     .filter(s->s.getId().equals(foodId))
                     .findFirst();

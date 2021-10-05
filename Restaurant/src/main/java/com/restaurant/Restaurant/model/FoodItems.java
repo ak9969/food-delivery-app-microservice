@@ -1,5 +1,6 @@
 package com.restaurant.Restaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -13,11 +14,14 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @Builder
 public class FoodItems {
-    @NotNull
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false,name = "food_id")
     private Long id;
+
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id", insertable = false, updatable = false)
+    private Restaurant restaurant;
     @NotBlank
     private String foodName;
     @NotNull

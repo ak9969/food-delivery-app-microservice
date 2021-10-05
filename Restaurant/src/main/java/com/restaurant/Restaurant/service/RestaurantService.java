@@ -2,11 +2,10 @@ package com.restaurant.Restaurant.service;
 
 import com.restaurant.Restaurant.model.FoodItems;
 import com.restaurant.Restaurant.model.Restaurant;
-import org.springframework.stereotype.Service;
+import com.restaurant.Restaurant.model.UpdateRestaurant;
 
 import java.util.List;
 
-@Service
 public interface RestaurantService {
     List<Restaurant> findByLocation(Long locationId);
 
@@ -16,7 +15,7 @@ public interface RestaurantService {
 
     List<Restaurant> findByLocationAndPriceAndRating(Long locationId,Double price, Double rating);
 
-    Restaurant updateRestaurantsByRestaurantId(Restaurant restaurant,Long id);
+    Restaurant updateRestaurantsByRestaurantId(UpdateRestaurant restaurant, Long id);
 
     Restaurant updateFoodQuantity(Long restaurantId, Long foodId, FoodItems foodItems);
 }
